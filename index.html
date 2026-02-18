@@ -3,234 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moon Dream | Handmade Candles & Wax Melts</title>
+    <title>Σελήνη Dream - Κεριά & Wax Melts</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #6a4c93; /* Μωβ της σελήνης */
-            --secondary: #ffafcc; /* Απαλό ροζ */
-            --dark: #2d2d2d;
-            --light: #fffaf0; /* Cream background */
-            --gold: #d4af37;
-        }
-
-        * { box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--light); color: var(--dark); margin: 0; }
-        
-        /* Typography */
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-        /* Header & Nav */
-        header { background: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 2.5rem; color: var(--primary); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        nav { display: flex; justify-content: center; gap: 30px; padding: 15px; background: white; border-bottom: 1px solid #eee; }
-        nav a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
-        nav a:hover { color: var(--primary); }
-
-        /* Hero Section */
-        .hero { height: 40vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(rgba(106, 76, 147, 0.1), rgba(106, 76, 147, 0.1)), url('https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&q=80&w=1500'); background-size: cover; background-position: center; text-align: center; }
-        .hero h2 { font-size: 3rem; color: var(--primary); text-shadow: 2px 2px 4px white; }
-
-        /* Main Container */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .section-title { text-align: center; margin-bottom: 40px; font-size: 2rem; position: relative; }
-        .section-title::after { content: ''; width: 60px; height: 3px; background: var(--primary); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); }
-
-        /* Products Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .product-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; position: relative; border: 1px solid #f0f0f0; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .product-image { width: 100%; height: 250px; object-fit: cover; }
-        .product-info { padding: 20px; text-align: center; }
-        .product-info h3 { margin: 10px 0; font-size: 1.3rem; }
-        .price { color: var(--primary); font-weight: 600; font-size: 1.2rem; margin-bottom: 15px; }
-        .btn-buy { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
-        .btn-buy:hover { background: var(--dark); }
-
-        /* Admin & Forms */
-        .admin-panel { display: none; background: white; padding: 30px; border-radius: 15px; border: 2px dashed var(--primary); margin-top: 50px; }
-        .form-group { margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-        .order-row { background: #fff; border-bottom: 1px solid #eee; }
-
-        /* Floating Cart Icon */
-        .cart-status { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 2000; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
+        header { background: #2c3e50; color: white; padding: 1.5rem; text-align: center; }
+        nav { display: flex; justify-content: center; background: #34495e; padding: 10px; position: sticky; top: 0; z-index: 1000; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; cursor: pointer; font-weight: bold; }
+        nav a:hover { color: #e67e22; }
+        .page { display: none; padding: 20px; max-width: 1000px; margin: auto; min-height: 80vh; }
+        .active { display: block; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin: 10px 0; color: #2c3e50; }
+        .price { font-size: 1.2rem; color: #e67e22; font-weight: bold; }
+        form { display: flex; flex-direction: column; gap: 15px; background: white; padding: 30px; border-radius: 12px; max-width: 400px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { padding: 12px; border-radius: 6px; border: 1px solid #ddd; font-size: 1rem; }
+        button { background: #e67e22; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+        button:hover { background: #d35400; }
+        footer { text-align: center; padding: 20px; background: #2c3e50; color: white; margin-top: 40px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 class="logo">Moon Dream</h1>
+    <h1>Σελήνη Dream 🌙</h1>
+    <p>Χειροποίητα Κεριά & Αρωματικά Wax Melts</p>
 </header>
 
 <nav>
-    <a onclick="showPage('shop')">ΚΑΤΑΣΤΗΜΑ</a>
-    <a onclick="showPage('keria')">ΚΕΡΙΑ</a>
-    <a onclick="showPage('melts')">WAX MELTS</a>
-    <a onclick="showPage('admin')" id="admin-link">ADMIN</a>
+    <a onclick="showPage('home')">Αρχική</a>
+    <a onclick="showPage('candles')">Κεριά</a>
+    <a onclick="showPage('wax-melts')">Wax Melts</a>
+    <a onclick="showPage('register')">Εγγραφή Πελάτη</a>
 </nav>
 
-<div class="hero">
-    <h2>Φως και Άρωμα για την Ψυχή</h2>
+<div id="home" class="page active">
+    <div style="text-align:center; margin-top: 50px;">
+        <h2>Καλώς ήρθατε στο "Σελήνη Dream"</h2>
+        <p>Ανακαλύψτε τη συλλογή μας από φυσικά υλικά και μοναδικά αρώματα.</p>
+        <img src="https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=600&q=80" alt="Candles" style="width:100%; max-width:600px; border-radius:15px; margin-top:20px;">
+    </div>
 </div>
 
-<div class="container" id="main-content">
-    <div id="shop-view">
-        <h2 class="section-title">Η Συλλογή μας</h2>
-        <div id="products-grid" class="grid">
-            </div>
-    </div>
-
-    <div id="admin-view" class="admin-panel">
-        <h2 class="section-title">Διαχείριση Καταστήματος</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-            <div>
-                <h3>Προσθήκη Νέου Προϊόντος</h3>
-                <div class="form-group"><input type="text" id="p-name" placeholder="Όνομα Προϊόντος"></div>
-                <div class="form-group">
-                    <select id="p-cat">
-                        <option value="Κεριά">Κεριά</option>
-                        <option value="Wax Melts">Wax Melts</option>
-                    </select>
-                </div>
-                <div class="form-group"><input type="number" id="p-price" placeholder="Τιμή (€)"></div>
-                <div class="form-group"><input type="text" id="p-img" placeholder="Link Φωτογραφίας (URL)"></div>
-                <div class="form-group"><textarea id="p-desc" placeholder="Περιγραφή"></textarea></div>
-                <button class="btn-buy" onclick="addNewProduct()">Δημοσίευση</button>
-            </div>
-            <div>
-                <h3>Πρόσφατες Παραγγελίες</h3>
-                <div id="admin-orders">
-                    </div>
-            </div>
+<div id="candles" class="page">
+    <h2>🕯️ Η Συλλογή Κεριών</h2>
+    <div class="product-grid">
+        <div class="card">
+            <h3>Κερί Σόγιας Λεβάντα</h3>
+            <p class="price">12.00€</p>
+            <button onclick="handleOrder('Κερί Λεβάντα')">Προσθήκη στο καλάθι</button>
+        </div>
+        <div class="card">
+            <h3>Κερί Βανίλια Μαδαγασκάρης</h3>
+            <p class="price">10.00€</p>
+            <button onclick="handleOrder('Κερί Βανίλια')">Προσθήκη στο καλάθι</button>
+        </div>
+        <div class="card">
+            <h3>Midnight Dream (Limited)</h3>
+            <p class="price">15.00€</p>
+            <button onclick="handleOrder('Midnight Dream')">Προσθήκη στο καλάθι</button>
         </div>
     </div>
 </div>
 
-<div class="cart-status" onclick="checkout()">
-    🛒 <span id="cart-count">0</span> Προϊόντα
+<div id="wax-melts" class="page">
+    <h2>✨ Αρωματικά Wax Melts</h2>
+    <div class="product-grid">
+        <div class="card">
+            <h3>Melt Σανδαλόξυλο</h3>
+            <p class="price">5.00€</p>
+            <button onclick="handleOrder('Melt Σανδαλόξυλο')">Προσθήκη στο καλάθι</button>
+        </div>
+        <div class="card">
+            <h3>Melt Φράουλα & Cream</h3>
+            <p class="price">5.00€</p>
+            <button onclick="handleOrder('Melt Φράουλα')">Προσθήκη στο καλάθι</button>
+        </div>
+    </div>
 </div>
 
+<div id="register" class="page">
+    <h2 style="text-align:center;">Γίνετε μέλος</h2>
+    <p style="text-align:center;">Δημιουργήστε λογαριασμό για να βλέπετε τις παραγγελίες σας.</p>
+    <form id="registrationForm">
+        <input type="text" id="fullName" placeholder="Ονοματεπώνυμο" required>
+        <input type="email" id="userEmail" placeholder="Email" required>
+        <input type="password" id="userPass" placeholder="Κωδικός" required>
+        <button type="submit" id="regBtn">Εγγραφή Τώρα</button>
+    </form>
+</div>
+
+<footer>
+    <p>&copy; 2026 Σελήνη Dream - Κατασκευάστηκε με αγάπη.</p>
+</footer>
+
 <script>
-    // ΣΗΜΑΝΤΙΚΟ: ΑΝΤΙΚΑΤΑΣΤΗΣΕ ΜΕ ΤΑ ΔΙΚΑ ΣΟΥ ΣΤΟΙΧΕΙΑ ΑΠΟ ΤΟ SUPABASE
-    const SB_URL = "lujvmovxaseqqogvtvbl";
-    const SB_KEY = "sb_publishable_H99zj4Rlm7ScCm3p7l8o4A_eZK0Yc2H";
-    const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+    // --- ΡΥΘΜΙΣΕΙΣ SUPABASE ---
+    // ΑΝΤΙΚΑΤΕΣΤΗΣΕ ΤΑ ΠΑΡΑΚΑΤΩ ΜΕ ΤΑ ΔΙΚΑ ΣΟΥ ΣΤΟΙΧΕΙΑ
+    const SB_URL = https://lujvmovxaseqqogvtvbl.supabase.co'; 
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx1anZtb3Z4YXNlcXFvZ3Z0dmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzY3ODgsImV4cCI6MjA4NzAxMjc4OH0.ZEzTukvGyL32TOJ9mj3g4M8WAC-9j1Wkuc6mzhlNw5I';
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let cart = [];
-
-    // 1. ΦΟΡΤΩΜΑ ΠΡΟΪΟΝΤΩΝ
-    async function fetchProducts(category = 'all') {
-        let query = supabase.from('products').select('*');
-        if (category !== 'all') query = query.eq('category', category);
-        
-        const { data, error } = await query;
-        const grid = document.getElementById('products-grid');
-        grid.innerHTML = '';
-
-        if (data) {
-            data.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.image_url}" class="product-image">
-                        <div class="product-info">
-                            <h3>${p.name}</h3>
-                            <p>${p.description || ''}</p>
-                            <div class="price">${p.price}€</div>
-                            <button class="btn-buy" onclick="addToCart('${p.name}', ${p.price})">Προσθήκη στο Καλάθι</button>
-                        </div>
-                    </div>`;
-            });
-        }
+    // Λειτουργία Εναλλαγής Σελίδων
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        window.scrollTo(0,0);
     }
 
-    // 2. ΚΑΛΑΘΙ & ΠΑΡΑΓΓΕΛΙΑ
-    function addToCart(name, price) {
-        cart.push({ name, price });
-        document.getElementById('cart-count').innerText = cart.length;
-        alert(`${name} προστέθηκε!`);
+    // Λειτουργία Παραγγελίας
+    function handleOrder(itemName) {
+        alert("Το προϊόν '" + itemName + "' προστέθηκε! (Η σύνδεση με τον πίνακα orders θα γίνει στο επόμενο βήμα)");
     }
 
-    async function checkout() {
-        if (cart.length === 0) return alert("Το καλάθι είναι άδειο!");
-        
-        const name = prompt("Ονοματεπώνυμο:");
-        const email = prompt("Email:");
-        const address = prompt("Διεύθυνση Αποστολής:");
-        
-        if (!name || !email || !address) return;
+    // Λειτουργία Εγγραφής Πελάτη στη Βάση
+    document.getElementById('registrationForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('regBtn');
+        btn.innerText = "Παρακαλώ περιμένετε...";
+        btn.disabled = true;
 
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
-        const itemsList = cart.map(i => i.name).join(', ');
+        const name = document.getElementById('fullName').value;
+        const email = document.getElementById('userEmail').value;
+        const pass = document.getElementById('userPass').value;
 
-        const { error } = await supabase.from('orders').insert([
-            { customer_name: name, customer_email: email, address: address, items: itemsList, total: total }
-        ]);
+        const { data, error } = await supabaseClient
+            .from('customers') // Βεβαιώσου ότι ο πίνακας λέγεται 'customers'
+            .insert([{ full_name: name, email: email, password: pass }]);
 
-        if (!error) {
-            alert("Η παραγγελία εστάλη με επιτυχία!");
-            cart = [];
-            document.getElementById('cart-count').innerText = "0";
-        }
-    }
-
-    // 3. ADMIN ΛΕΙΤΟΥΡΓΙΕΣ
-    async function addNewProduct() {
-        const name = document.getElementById('p-name').value;
-        const category = document.getElementById('p-cat').value;
-        const price = document.getElementById('p-price').value;
-        const image_url = document.getElementById('p-img').value;
-        const description = document.getElementById('p-desc').value;
-
-        const { error } = await supabase.from('products').insert([{ name, category, price, image_url, description }]);
-        if (!error) {
-            alert("Το προϊόν προστέθηκε!");
-            location.reload();
-        }
-    }
-
-    async function loadAdminOrders() {
-        const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-        const container = document.getElementById('admin-orders');
-        container.innerHTML = data.map(o => `
-            <div style="background:#f9f9f9; padding:10px; margin-bottom:10px; border-left:4px solid var(--primary)">
-                <strong>${o.customer_name}</strong> - ${o.total}€<br>
-                <small>${o.items}</small><br>
-                <em>${o.address}</em>
-            </div>
-        `).join('');
-    }
-
-    // 4. NAVIGATION
-    function showPage(page) {
-        const adminView = document.getElementById('admin-view');
-        const shopView = document.getElementById('shop-view');
-        
-        if (page === 'admin') {
-            const pass = prompt("Κωδικός Διαχειριστή:");
-            if (pass === "admin123") { // Βάλε όποιον κωδικό θες
-                adminView.style.display = "block";
-                shopView.style.display = "none";
-                loadAdminOrders();
-            }
-        } else if (page === 'keria') {
-            adminView.style.display = "none";
-            shopView.style.display = "block";
-            fetchProducts('Κεριά');
-        } else if (page === 'melts') {
-            adminView.style.display = "none";
-            shopView.style.display = "block";
-            fetchProducts('Wax Melts');
+        if (error) {
+            alert("Κάτι πήγε λάθος: " + error.message);
         } else {
-            adminView.style.display = "none";
-            shopView.style.display = "block";
-            fetchProducts();
+            alert("Επιτυχία! Γεια σου " + name + ". Τα στοιχεία σου αποθηκεύτηκαν.");
+            document.getElementById('registrationForm').reset();
+            showPage('home');
         }
-    }
-
-    // Initial Load
-    fetchProducts();
+        btn.innerText = "Εγγραφή Τώρα";
+        btn.disabled = false;
+    };
 </script>
 
 </body>
